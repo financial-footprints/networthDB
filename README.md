@@ -17,6 +17,7 @@ rustc --version
 ```sh
 cargo build
 cargo test
+cargo run
 ```
 
 ## License

@@ -1,4 +1,5 @@
 {
   "rust-analyzer.procMacro.enable": true,
+  "rust-analyzer.inlayHints.typeHints": false,
   "editor.defaultFormatter": "rust-lang.rust-analyzer"
 }
