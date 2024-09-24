@@ -1,41 +1,57 @@
-use std::env;
-
 mod parsers;
 mod reader;
 
-fn load_env_variables() -> String {
+use std::{env, fs};
+
+use parsers::types::{Parser, Statement};
+use reader::File;
+
+fn process_bank_data() -> Vec<String> {
     dotenv::dotenv().ok();
-    let env_file_path = env::var("ENV_FILE_PATH").ok();
+    let file_path = env::var("PROCESS_BANK_DATA_FOLDER")
+        .expect("error.main.process_bank_data.folder_not_found");
 
-    if let Some(path) = env_file_path {
-        dotenv::from_path(path).ok();
-    }
+    let files = fs::read_dir(file_path).expect("error.main.process_bank_data.cannot_read_folder");
 
-    let file_path = env::var("FILE_PATH").expect("E0001: FILE_PATH not provided");
+    let file_paths = files
+        .map(|entry| {
+            entry
+                .expect("error.main.process_bank_data.cannot_read_file")
+                .path()
+                .display()
+                .to_string()
+        })
+        .collect::<Vec<String>>();
 
-    return file_path;
+    return file_paths;
 }
 
 fn main() {
-    let file_path = load_env_variables();
+    let files = process_bank_data();
 
+    for file_path in files {
+        let (file, parser, parsed_data) = get_file_content(file_path);
+
+        for statement in parsed_data {
+            println!(
+                "Date: {}, Description: {}, Withdrawal: {}, Deposit: {}, Balance: {}",
+                statement.date,
+                statement.description,
+                statement.withdrawal,
+                statement.deposit,
+                statement.balance
+            );
+        }
+
+        println!("File Type: {}", file.file_type);
+        println!("Parser: {}", parser.id);
+    }
+}
+
+fn get_file_content(file_path: String) -> (File, Parser, Vec<Statement>) {
     let file = reader::read_file(&file_path);
     let parser = parsers::get_parser(&file);
 
     let parsed_data = parser.parse(&file);
-
-    for statement in parsed_data {
-        println!(
-            "Date: {}, Description: {}, Withdrawal: {}, Deposit: {}, Balance: {}",
-            statement.date,
-            statement.description,
-            statement.withdrawal,
-            statement.deposit,
-            statement.balance
-        );
-    }
-
-    println!("File Type: {}", file.file_type);
-    // println!("File Data: {:?}", file.data);
-    println!("Parser: {}", parser.id);
+    return (file, parser, parsed_data);
 }

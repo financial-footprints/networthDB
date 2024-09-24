@@ -1,6 +1,5 @@
 ## Repository specific
 .env
-data/*
 .local
 
 # Rust

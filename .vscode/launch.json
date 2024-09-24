@@ -2,10 +2,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Rust",
+      "name": "Launch",
       "type": "lldb",
       "request": "launch",
-      "program": "${workspaceFolder}/target/debug/${workspaceFolderBasename}",
+      "cargo": {
+        "args": ["build"]
+      },
+      "program": "${workspaceFolder}/target/debug/networth_db",
       "args": [],
       "cwd": "${workspaceFolder}",
       "envFile": "${workspaceFolder}/.env",

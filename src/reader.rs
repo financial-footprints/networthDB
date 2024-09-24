@@ -6,7 +6,8 @@ pub struct File {
 }
 
 fn read_xls(file_path: &str) -> Vec<Vec<String>> {
-    let mut workbook: Xls<_> = open_workbook(file_path).expect("E0002: Cannot open file");
+    let mut workbook: Xls<_> =
+        open_workbook(file_path).expect("error.reader.read_xls.cannot_open_file");
     let mut data: Vec<Vec<String>> = Vec::new();
     for sheet in workbook.sheet_names().to_owned() {
         if let Ok(range) = workbook.worksheet_range(&sheet) {
@@ -32,5 +33,5 @@ pub fn read_file(file_path: &str) -> File {
         };
     }
 
-    panic!("E0003: Unsupported file type. Only 'xls' files are supported.");
+    panic!("error.reader.read_file.unsupported_file_type");
 }

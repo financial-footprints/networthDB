@@ -35,14 +35,14 @@ pub fn get_parser() -> Parser {
                     "Closing Balance",
                 ]
             })
-            .expect("E-HDFCIND-0001: Start of data not found")
+            .expect("error.parser.hdfcind.start_of_data_not_found")
             + 2;
 
         let data_end_index = file.data[data_start_index..]
             .iter()
             .position(|row| row == &["", "", "", "", "", "", ""])
-            .expect("E-HDFCIND-0002: End of data not found")
-            - 2;
+            .expect("error.parser.hdfcind.end_of_data_not_found")
+            + data_start_index;
 
         for row in &file.data[data_start_index..data_end_index] {
             let date = row[0].trim().to_string();

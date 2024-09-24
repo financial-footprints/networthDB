@@ -2,8 +2,6 @@
 
 TODO:
 
-- [ ] Start Writing tests (for hdfcind with file)
-- [ ] Try out vscode lldm debugger
 - [ ] Convert file_type to enum
 - [ ] Convert bankid to enum
 
