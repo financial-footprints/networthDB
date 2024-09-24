@@ -1,30 +1,49 @@
-mod hdfc;
-mod icici;
+use crate::reader::File;
 
-use crate::reader::FileData;
+pub struct Statement {
+    pub date: String,
+    pub description: String,
+    pub withdrawal: f64,
+    pub deposit: f64,
+    pub balance: f64,
+}
 
 pub struct Parser {
     pub id: String,
-    pub identify: fn(file_data: &FileData) -> bool,
+    pub identify: fn(&File) -> bool,
+    pub parse: fn(&File) -> Vec<Statement>,
 }
 
-fn get_all_parsers() -> Vec<Parser> {
-    let mut parsers = Vec::new();
+impl Parser {
+    pub fn identify(&self, file: &File) -> bool {
+        (self.identify)(file)
+    }
 
-    parsers.push(hdfc::get_parser());
-    parsers.push(icici::get_parser());
-
-    return parsers;
+    pub fn parse(&self, file: &File) -> Vec<Statement> {
+        (self.parse)(file)
+    }
 }
 
-pub fn get_parser(file_data: &FileData) -> Parser {
+pub fn get_parser(file: &File) -> Parser {
     let parsers = get_all_parsers();
 
     for parser in parsers {
-        if (parser.identify)(file_data) {
+        if parser.identify(file) {
             return parser;
         }
     }
 
     panic!("No matching parser found for the given file data");
+}
+
+mod hdfcind;
+mod icicind;
+
+fn get_all_parsers() -> Vec<Parser> {
+    let mut parsers = Vec::new();
+
+    parsers.push(hdfcind::get_parser());
+    parsers.push(icicind::get_parser());
+
+    return parsers;
 }
