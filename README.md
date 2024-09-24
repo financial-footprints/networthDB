@@ -1,10 +1,5 @@
 # NetworthDB
 
-TODO:
-
-- [ ] Convert file_type to enum
-- [ ] Convert bankid to enum
-
 The scope of this project is to read financial institution statements and convert data to SQL format.
 
 ## Setup

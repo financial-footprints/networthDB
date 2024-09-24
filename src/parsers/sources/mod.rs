@@ -1,4 +1,4 @@
-use super::types::{Parser, Statement};
+use super::types::{BankId, Parser, Statement};
 
 mod hdfcind;
 mod hdfcind_test;
